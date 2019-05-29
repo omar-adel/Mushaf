@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorSecondary" format="color"/>
+    <attr name="readBackground" format="color"/>
+    <attr name="itemBg" format="color"/>
+    <attr name="iconsColor" format="color"/>
+    <attr name="toolbarColor" format="color"/>
+    <attr name="transparentBackground" format="color"/>
+    <attr name="transparentItem" format="color"/>
+</resources>

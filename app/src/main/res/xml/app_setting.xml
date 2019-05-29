@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="@string/app_ِappearance">
+
+        <CheckBoxPreference
+                android:defaultValue="false"
+                android:title="@string/dark_mode"
+                android:key="@string/dark_mode"/>
+
+        <CheckBoxPreference
+                android:summaryOff="@string/arabic_mode_off"
+                android:defaultValue="false"
+                android:title="@string/arabic_mode"
+                android:key="@string/arabic_mode"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/reading">
+
+        <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="@string/translation_with_aya"
+                android:title="@string/translation_with_aya"/>
+
+        <CheckBoxPreference
+                android:summaryOff="@string/arabic_number_off_summery"
+                android:key="@string/arabic_numbers"
+                android:title="@string/arabic_numbers"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Reciting">
+
+        <Preference
+                android:key="@string/audio_quality_options"
+                android:title="@string/audio_quality_title"
+                android:summary="@string/audio_quality_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/privacy_and_details">
+
+        <Preference
+                android:summary="@string/data_validity_summery"
+                android:key="@string/data_validity"
+                android:title="@string/data_validity"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/about">
+        <Preference
+                android:selectable="false"
+                android:summary="@string/app_version"
+                android:title="@string/app_name"/>
+        <Preference
+                android:selectable="false"
+                android:summary="@string/word_summery"
+                android:title="@string/word"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+        android:layout_gravity="center"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="?toolbarColor"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+            android:orientation="vertical"
+            android:padding="25dp"
+            android:layout_width="wrap_content"
+            tools:ignore="RtlSymmetry"
+            android:layout_height="wrap_content">
+        <TextView
+                android:layout_marginEnd="50dp"
+                android:textColor="?android:textColor"
+                style="@style/AppTheme.Title"
+                android:text="@string/audio_quality_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginRight="50dp"/>
+        <RadioGroup
+                android:id="@+id/audioQualityGroup"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:textColor="?android:textColor"
+                    android:textAppearance="@style/AppTheme.Text.Normal.Mini"
+                    android:id="@+id/low_audio_quality"
+                    android:text="@string/low"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:textColor="?android:textColor"
+                    android:textAppearance="@style/AppTheme.Text.Normal.Mini"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/medium_audio_quality"
+                    android:checked="true"
+                    android:text="@string/medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <com.google.android.material.radiobutton.MaterialRadioButton
+
+                    android:textAppearance="@style/AppTheme.Text.Normal.Mini"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:textColor="?android:textColor"
+                    android:id="@+id/high_audio_quality"
+                    android:text="@string/high"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </RadioGroup>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

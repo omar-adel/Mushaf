@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ProgressBar
+        android:layout_gravity="center"
+        app:layout_anchorGravity="center"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:theme="@style/AppTheme.ProgressbarColor"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"/>

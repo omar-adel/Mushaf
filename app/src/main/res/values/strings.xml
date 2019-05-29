@@ -1,0 +1,122 @@
+<resources>
+    <string name="app_name">Musahaf</string>
+    <string name="app_version" translatable="false">V1.0</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="surah">Surah</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="Notes">Notes</string>
+    <string name="quran">Quran</string>
+    <string name="search">Search</string>
+    <string name="library">Library</string>
+    <string name="reciters">Reciters</string>
+    <string name="more">More</string>
+    <string name="last_page">last page</string>
+    <string name="retry">Retry</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="juz">Juz\'</string>
+    <string name="basmalia" translatable="false">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</string>
+    <string name="surah_tools" translatable="false">الٓمٓ * ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًۭى
+        لِّلْمُتَّقِينَ * ٱلَّذِينَ
+        يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ * وَٱلَّذِينَ يُؤْمِنُونَ
+        بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ * أُو۟لَٰٓئِكَ عَلَىٰ
+        هُدًۭى مِّن رَّبِّهِمْ ۖ وَأُو۟لَٰٓئِكَ هُمُ ٱلْمُفْلِحُونَ *
+    </string>
+    <string name="translate">Translate</string>
+    <string name="tafseer">Tafseer</string>
+    <string name="play">play</string>
+    <string name="word_by_word">Word by word</string>
+    <string name="connection_error_full_msg">Check your mobile data or Wi-Fi and try again, if the problem presiste
+        contact support.
+    </string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="word_by_wrod_confirmation" translatable="false">Word by word is available only in English</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="add_item">Add Item</string>
+    <string name="translation">Translation</string>
+    <string name="manage_library">Manage Library</string>
+    <string name="translation_tools" translatable="false">It is they who follow the guidance [which comes from their
+        Sustainer; and it is
+        they, they who\' shall attain to a happy state!
+    </string>
+    <string name="choose_surah">Choose Surah</string>
+    <string name="no_data_stored">No item found</string>
+    <string name="no_result">No result found</string>
+    <string name="to_aya">To Aya</string>
+    <string name="from_aya">From Aya</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="repeat_whole_set">Repeat whole set</string>
+    <string name="play_each_verse">Play each verse</string>
+    <string name="streaming_online">Stream online</string>
+    <string name="error_downloading">Downloading Error</string>
+    <string name="search_the_quran">Search the Quran</string>
+    <string name="found">Found in surah</string>
+    <string name="type_to_search">Type to Search</string>
+    <string name="result_for">result for</string>
+    <string name="wait">Please wait!!</string>
+    <string name="empty_search_query">Type first to Search</string>
+    <string name="In">in</string>
+    <string name="page">page</string>
+    <string name="aya">Aya</string>
+    <string name="remove_bookmark">Bookmark removed</string>
+    <string name="undo">Undo</string>
+    <string name="ayah_copied_popup">ayah_coped</string>
+    <string name="share_ayah_text">Share aya</string>
+    <string name="share_translation">Share translation/tafsir</string>
+    <string name="copy">Copy</string>
+    <string name="text_copied">Text Copied</string>
+    <string name="share">Share</string>
+    <string name="no_bookmarks">No Bookmarks Saved Yet</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="arabic_mode">Arabic Mode</string>
+    <string name="translation_with_aya">Display translation with Aya</string>
+    <string name="arabic_numbers">Show Arabic numbers</string>
+    <string name="arabic_number_off_summery">When it\'s disabled it will follow current app language</string>
+    <string name="arabic_mode_off">When it\'s disabled it will follow current system language</string>
+    <string name="about">About</string>
+    <string name="data_validity">Data validity</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="save_in_bookmarks">Save in bookmarks</string>
+    <string name="no_repeating">none</string>
+    <string name="data_validity_summery">All data is retrieved from \'alquran.cloud\' and it\'s user responsibility and
+        the server team to verify the data validity and the app developer team of Musahaf is not responsible for any
+        mistake
+        or incorrectness in the provided data in the app.
+    </string>
+    <string name="word">A Statement</string>
+    <string name="word_summery">May Allah accept this humble work, which was done in good faith to benefit Muslims
+        wherever they are. We also hope to make it a reason to save us from the punishment of the Hellfire, and may
+        Allah grant those who participated in developing the application or helped accomplishing it, the Paradise.
+    </string>
+    <string name="downloading">Downloading...</string>
+    <string name="cancel">Cancel</string>
+    <string name="cancel_process">Cancel</string>
+    <string name="app_ِappearance">Appearance</string>
+    <string name="reading">Reading</string>
+    <string name="privacy_and_details"><![CDATA[Privacy & Details]]></string>
+    <string name="aya_number">Aya number</string>
+    <string name="select_aya">Select Aya</string>
+    <string name="move_to_aya">Move To Aya</string>
+    <string name="go_to_page">Go to Page</string>
+    <string name="hizb">Hizb</string>
+    <string name="enter_page_number">Enter page number from 1 and 604</string>
+    <string name="number">number</string>
+    <string name="navigate_to">Navigate to</string>
+    <string name="enter_number">Enter number!</string>
+    <string name="quarter">Quarter</string>
+    <string name="playing_error">Playing Error</string>
+    <string name="audio_quality_options" translatable="false">audio_quality_options</string>
+    <string name="audio_quality_title">Reciter audio quality</string>
+    <string name="audio_quality_summary">Changing this setting will only affect audio online streaming. Increasing audio quality will increase data usage</string>
+
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+
+
+</resources>

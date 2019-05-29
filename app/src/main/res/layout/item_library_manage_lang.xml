@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+            android:background="@color/colorSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+    <TextView
+            android:layout_marginStart="21dp"
+            android:layout_centerVertical="true"
+            tools:text="En"
+            android:textColor="@android:color/white"
+            android:textAppearance="@style/AppTheme.Title.Bold"
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="21dp"/>
+    </RelativeLayout>
+    <include layout="@layout/item_library_manage"/>
+</LinearLayout>

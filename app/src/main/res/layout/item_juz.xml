@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/juz_view_root"
+        android:orientation="vertical"
+        app:cardElevation="1dp"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="?colorSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="@dimen/_8sdp"
+            android:layout_width="match_parent"
+            android:layout_height="50sp">
+        <TextView
+                android:textSize="17sp"
+                android:textColor="#FFF"
+                tools:text="@string/juz"
+                android:id="@+id/juzNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <Space android:layout_width="0dp"
+               android:layout_height="1dp"
+               android:layout_weight="1"/>
+
+        <TextView
+                tools:text="1"
+                android:id="@+id/pageNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
