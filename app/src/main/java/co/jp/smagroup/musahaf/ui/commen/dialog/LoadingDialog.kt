@@ -7,8 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import co.jp.smagroup.musahaf.R
 import co.jp.smagroup.musahaf.ui.commen.BaseActivity
-import com.codebox.lib.android.resoures.Stringify
-import com.codebox.lib.android.widgets.shortToast
+import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.standard.lambda.unitFun
 
 
@@ -27,7 +26,7 @@ class LoadingDialog : DialogFragment() {
 
         alertDialog.setOnKeyListener { _, keyCode, _ ->
             if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
-                context?.let { shortToast(Stringify(R.string.wait, it)) }
+                context?.let { CustomToast.makeShort(it, R.string.wait) }
                 true // pretend we've processed it
             } else false // pass on to be processed as normal
 

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
-import co.jp.smagroup.musahaf.framework.utils.TextTypeOpt
 import co.jp.smagroup.musahaf.model.DownloadingState
 import co.jp.smagroup.musahaf.model.Edition
 import kotlinx.coroutines.*
@@ -29,13 +28,13 @@ class LibraryViewModel(private val repository: Repository) : ViewModel() {
         if (!::_allAvailableEditions.isInitialized)
             _allAvailableEditions = MutableLiveData()
 
-        if (DataHolder.editionsData.isEmpty()) {
+        if (editionsData.isEmpty()) {
             coroutineScope.launch {
-                DataHolder.editionsData = withContext(Dispatchers.IO) { repository.getAllEditionsWithState() }
-                _allAvailableEditions.postValue(DataHolder.editionsData)
+                editionsData = withContext(Dispatchers.IO) { repository.getAllEditionsWithState() }
+                _allAvailableEditions.postValue(editionsData)
             }
         } else {
-            _allAvailableEditions.postValue(DataHolder.editionsData)
+            _allAvailableEditions.postValue(editionsData)
         }
     }
 
@@ -47,26 +46,27 @@ class LibraryViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun updateDataDownloadState(identity: String) {
+    fun updateDataDownloadState(editionIdentifier: String) {
         coroutineScope.launch {
-            DataHolder.editionsData = withContext(Dispatchers.IO) {
-                DataHolder.editionsData.map {
-                    if (it.first.identifier == identity)
-                        it.first to repository.getDownloadState(identity)
+            editionsData = withContext(Dispatchers.IO) {
+                editionsData.map {
+                    if (it.first.identifier == editionIdentifier)
+                        it.first to repository.getDownloadState(editionIdentifier)
                     else it
                 }
             }
-            _allAvailableEditions.value = DataHolder.editionsData
+            _allAvailableEditions.value = editionsData
         }
     }
 
     override fun onCleared() {
         super.onCleared()
         job.cancelChildren()
-        DataHolder.editionsData = emptyList()
+        editionsData = emptyList()
+    }
+    companion object {
+        private var editionsData = listOf<Pair<Edition, DownloadingState>>()
     }
 }
 
-object DataHolder {
-    var editionsData = listOf<Pair<Edition, DownloadingState>>()
-}
+

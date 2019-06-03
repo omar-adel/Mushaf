@@ -11,6 +11,7 @@ import co.jp.smagroup.musahaf.model.Reciter
 import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
 import co.jp.smagroup.musahaf.ui.quran.read.ReadQuranActivity
 import co.jp.smagroup.musahaf.utils.extensions.observeOnMainThread
+import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.android.fragments.replaceFragment
 import com.codebox.lib.android.widgets.shortToast
 import com.tonyodev.fetch2.Fetch
@@ -118,7 +119,7 @@ class ReciterPlayer(
         for (number in playRange) {
             //Checking if not contains this number, if contains
             if (newDownloadedReciter.firstOrNull { it.number == number } == null) {
-                shortToast("Downloading Error")
+                CustomToast.makeShort(readQuranActivity,R.string.error_downloading)
                 isError = true
                 break
             }

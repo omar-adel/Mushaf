@@ -7,9 +7,9 @@ import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
 import co.jp.smagroup.musahaf.model.Aya
 import co.jp.smagroup.musahaf.ui.commen.CacheMaker
+import kotlinx.serialization.list
 import kotlinx.coroutines.*
 import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.list
 
 class QuranViewModel(private val repository: Repository) : ViewModel() {
     @UnstableDefault
@@ -24,7 +24,8 @@ class QuranViewModel(private val repository: Repository) : ViewModel() {
         if (!::_mainMusahaf.isInitialized)
             _mainMusahaf = MutableLiveData()
         coroutineScope.launch {
-            withContext(Dispatchers.IO) { loadAyatData() }
+            if (QuranDataList.isEmpty())
+                withContext(Dispatchers.IO) { loadAyatData() }
             _mainMusahaf.postValue(QuranDataList)
         }
     }
@@ -32,13 +33,11 @@ class QuranViewModel(private val repository: Repository) : ViewModel() {
 
     @UseExperimental(UnstableDefault::class)
     private suspend fun loadAyatData() {
-        if (QuranDataList.isEmpty()) {
-            val cachedData = cacheMaker.getSavedList(MusahafConstants.MainMusahaf, Aya.serializer().list)
-            if (cachedData != null) QuranDataList = cachedData
-            else {
-                QuranDataList = repository.getMusahafAyat(MusahafConstants.MainMusahaf)
-                saveAyatArrayToCache()
-            }
+        val cachedData = cacheMaker.getSavedList(MusahafConstants.MainMusahaf, Aya.serializer().list)
+        if (cachedData != null) QuranDataList = cachedData
+        else {
+            QuranDataList = repository.getMusahafAyat(MusahafConstants.MainMusahaf)
+            saveAyatArrayToCache()
         }
     }
 
@@ -73,7 +72,6 @@ class QuranViewModel(private val repository: Repository) : ViewModel() {
     companion object {
         var QuranDataList = listOf<Aya>()
             private set
-
         fun isQuranDataLoaded() = QuranDataList.isNotEmpty()
     }
 }

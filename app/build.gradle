@@ -137,4 +137,5 @@ dependencies {
 
     //Crashlytics
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+
 }

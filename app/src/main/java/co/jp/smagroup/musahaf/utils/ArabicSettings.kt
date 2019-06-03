@@ -195,19 +195,11 @@ fun formatMiniAlef(quranicText: CharSequence): String {
     return output
 }
 
-fun removeFormateMiniAlef(quranicText: CharSequence): String {
-    var output = ""
-    for (char in quranicText)
-        output += if (char.toString() != spacedChar) char
-        else ""
-    return output
-}
-
-fun String.removePunctuation(replaceMiniAlefWith: String): String {
+fun String.removePunctuation(miniAlefReplacement: String): String {
     //Remove honorific sign
     var output = this.replace("ٮ", "ى")
     for (punct in punctuationArray) {
-        val replacement = if (punct == "\u0670") replaceMiniAlefWith else if (punct == "ٮ") "ى" else ""
+        val replacement = if (punct == "\u0670") miniAlefReplacement else if (punct == "ٮ") "ى" else ""
         output = output.replace(punct, replacement)
     }
     return output
@@ -225,9 +217,10 @@ fun String.removePunctuation(): String {
 }
 
 fun String.removeAllPunctuation(): String {
-    var output = this.replace("ٱ", "ا")
+    var output = this.replace(miniAlef, "ا")
+     output = output.replace("ٱ", "ا")
+
     for (punct in punctuationArray) {
-        val replacement = if (punct == "\u0670") "ا" else ""
 
         output = output.replace(punct, "")
     }
@@ -238,9 +231,9 @@ val Char.isPunctuation: Boolean
     get() = this.toString().equalAnyOf(*punctuationArray)
 
 
-private fun String.equalAnyOf(vararg chras: String): Boolean {
+private fun String.equalAnyOf(vararg chars: String): Boolean {
     var isEqual = false
-    for (c in chras) {
+    for (c in chars) {
         if (this != c)
             continue
         isEqual = true
@@ -249,9 +242,9 @@ private fun String.equalAnyOf(vararg chras: String): Boolean {
     return isEqual
 }
 
-private fun Char.equalAnyOf(vararg chras: Char): Boolean {
+private fun Char.equalAnyOf(vararg chars: Char): Boolean {
     var isEqual = false
-    for (c in chras) {
+    for (c in chars) {
         if (this != c)
             continue
         isEqual = true

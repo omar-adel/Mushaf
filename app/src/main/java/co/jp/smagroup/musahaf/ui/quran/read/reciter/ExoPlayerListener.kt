@@ -11,6 +11,7 @@ import co.jp.smagroup.musahaf.utils.clearHighlighted
 import co.jp.smagroup.musahaf.utils.highlightText
 import co.jp.smagroup.musahaf.utils.toLocalizedNumber
 import co.jp.smagroup.musahaf.utils.whiteSpaceMagnifier
+import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.android.resoures.Colour
 import com.codebox.lib.android.resoures.Stringer
 import com.codebox.lib.android.widgets.shortToast
@@ -42,7 +43,7 @@ class ExoPlayerListener(
 
     override fun onPlayerError(error: ExoPlaybackException) {
         val exoPlayerErrorTag = "exoPlayerErrorTag"
-        shortToast(readQuranActivity.getString(R.string.playing_error))
+        CustomToast.makeShort(readQuranActivity,R.string.playing_error)
 
         when (error.type) {
             ExoPlaybackException.TYPE_SOURCE -> Crashlytics.log(
@@ -125,7 +126,7 @@ class ExoPlayerListener(
             }
         }
         if (currentAyaIdx == -1)
-            shortToast("Error text not found")
+            CustomToast.makeShort(readQuranActivity,"Error text not found")
         val spannable = currentPlayedTextView!!.text.toSpannable()
         spannable.clearHighlighted()
         spannable.highlightText(highlightedColor, currentAyaIdx, currentAyaIdx + ayaFormatted.length)

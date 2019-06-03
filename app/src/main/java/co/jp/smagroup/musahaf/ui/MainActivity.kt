@@ -9,17 +9,19 @@ import androidx.fragment.app.Fragment
 import co.jp.smagroup.musahaf.R
 import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
-import co.jp.smagroup.musahaf.model.Aya
 import co.jp.smagroup.musahaf.ui.bookmarks.BookmarksFragment
 import co.jp.smagroup.musahaf.ui.commen.BaseActivity
 import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
+import co.jp.smagroup.musahaf.ui.commen.PreferencesConstants
 import co.jp.smagroup.musahaf.ui.library.LibraryFragment
 import co.jp.smagroup.musahaf.ui.more.SettingsFragment
 import co.jp.smagroup.musahaf.ui.quran.QuranListFragment
 import co.jp.smagroup.musahaf.ui.quran.QuranViewModel
+import co.jp.smagroup.musahaf.ui.quran.read.ReadQuranActivity
 import co.jp.smagroup.musahaf.utils.extensions.observeOnMainThread
 import co.jp.smagroup.musahaf.utils.extensions.viewModelOf
 import co.jp.smagroup.musahaf.utils.notNull
+import com.codebox.lib.android.actvity.newIntent
 import com.codebox.lib.android.fragments.replaceFragment
 import com.codebox.lib.android.utils.AppPreferences
 import com.codebox.lib.android.views.utils.invisible
@@ -30,9 +32,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.list
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +43,7 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
     lateinit var repository: Repository
     private var disposable: Disposable? = null
     private lateinit var navigationViewModel: NavigationViewModel
+
     init {
         MusahafApplication.appComponent.inject(this)
     }
@@ -129,5 +129,6 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
             repository.getEditionsByType(MusahafConstants.Audio, true)
         }
     }
+
 }
 

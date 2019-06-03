@@ -29,9 +29,7 @@ import co.jp.smagroup.musahaf.utils.extensions.viewModelOf
 import co.jp.smagroup.musahaf.utils.notNull
 import co.jp.smagroup.musahaf.utils.toLocalizedNumber
 import com.codebox.kidslab.Framework.Views.CustomToast
-import com.codebox.lib.android.utils.AppPreferences
 import com.codebox.lib.android.utils.screenHelpers.dp
-import com.codebox.lib.android.widgets.shortToast
 import com.codebox.lib.standard.lambda.unitFun
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
@@ -66,7 +64,6 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
     private var doAfterPermission: unitFun? = null
     private var currentPageKey = "current read page"
     private lateinit var viewModel: QuranViewModel
-    private val preferences = AppPreferences()
 
     private var disposable: Disposable? = null
     private val job: Job = SupervisorJob()
@@ -282,7 +279,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 doAfterPermission?.invoke()
-            } else shortToast("Cannot save audio files without the requested permission")
+            } else CustomToast.makeShort(this, "Cannot save audio files without the requested permission")
         }
     }
 

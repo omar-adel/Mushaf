@@ -91,10 +91,17 @@
     <string name="quarter">الربع</string>
     <string name="playing_error">حدث خطأ أثناء التشغيل</string>
     <string name="audio_quality_title">جودة صوت القارئ</string>
-    <string name="audio_quality_summary">تغير إعدادت هذا الخير سوف يؤثر قط على الأستماع المباشر من الإنترنت مع الإنتبه إلى أن رفع جود الصوت سوف تؤدي لستخدم بيانات أكثر</string>
+    <string name="audio_quality_summary">تغير إعدادت هذا الخير سوف يؤثر قط على الأستماع المباشر من الإنترنت مع الإنتبه
+        إلى أن رفع جود الصوت سوف تؤدي لستخدم بيانات أكثر
+    </string>
 
-        <string name="low">منخفضة</string>
-        <string name="medium">متوسطة</string>
-        <string name="high">عالية</string>
+    <string name="low">منخفضة</string>
+    <string name="medium">متوسطة</string>
+    <string name="high">عالية</string>
+    <string name="select_word_leaset">حدد كلمة واحد على الأقل</string>
+    <string name="bookmark_removed">تمت إزالة الإشارة</string>
+    <string name="bookmard_saved">تم حفظ الإشارة</string>
+    <string name="shortcut_created">تم إنشاء الإختصار</string>
+    <string name="unable_to_add_shortcut">Unable to add a shortcut</string>
 
 </resources>

@@ -2,23 +2,23 @@ package co.jp.smagroup.musahaf.ui.library.manage
 
 import android.os.Bundle
 import co.jp.smagroup.musahaf.R
-import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
 import co.jp.smagroup.musahaf.ui.commen.BaseActivity
+import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
 import co.jp.smagroup.musahaf.utils.extensions.observeOnMainThread
-import com.codebox.lib.android.widgets.longToast
+import com.codebox.kidslab.Framework.Views.CustomToast
 import kotlinx.android.synthetic.main.activity_manage_library.*
 import javax.inject.Inject
 
 class ManageLibraryActivity : BaseActivity() {
-    
+
     @Inject
     lateinit var repository: Repository
-    
+
     init {
         MusahafApplication.appComponent.inject(this)
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lockScreenOrientation()
@@ -28,7 +28,7 @@ class ManageLibraryActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        repository.errorStream.filter { it.isNotEmpty() }.observeOnMainThread { longToast(it) }
+        repository.errorStream.filter { it.isNotEmpty() }.observeOnMainThread { CustomToast.makeLong(this, it) }
 
         val tabPagerAdapter = TabPagerAdapter(this, supportFragmentManager)
         viewpager_manage_library.adapter = tabPagerAdapter
@@ -39,17 +39,17 @@ class ManageLibraryActivity : BaseActivity() {
             tab?.customView = tabPagerAdapter.bindView(i)
         }
     }
-    
+
     override fun onResume() {
         super.onResume()
         currentSystemVisibility = false
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
         unlockScreenOrientation()
     }
-    
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

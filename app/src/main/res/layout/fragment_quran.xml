@@ -8,7 +8,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-                android:paddingBottom="@dimen/_45sdp"
+                android:paddingBottom="80dp"
                 android:clipToPadding="false"
                 tools:itemCoun="20"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

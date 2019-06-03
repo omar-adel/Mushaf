@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import co.jp.smagroup.musahaf.R
+import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.android.actvity.newIntent
 import com.codebox.lib.android.widgets.longToast
 import com.codebox.lib.android.widgets.shortToast
@@ -27,7 +28,7 @@ class NavigateToPageDialog() : BottomSheetDialogFragment() {
             if (actionId == EditorInfo.IME_ACTION_GO && !page_number_edit_text.text.isNullOrBlank()) {
                 getToPage(page_number_edit_text.text.toString().toInt())
             } else
-                shortToast(getString(R.string.enter_number))
+                activity?.let { CustomToast.makeShort(it,R.string.enter_number) }
             true
         }
     }
@@ -44,7 +45,7 @@ class NavigateToPageDialog() : BottomSheetDialogFragment() {
                 dismiss()
             }
         } else
-        longToast(getString(R.string.enter_page_number))
+            activity?.let { CustomToast.makeLong(it,R.string.enter_page_number) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =

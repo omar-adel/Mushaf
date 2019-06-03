@@ -39,11 +39,11 @@ import co.jp.smagroup.musahaf.utils.extensions.asIndices
 import co.jp.smagroup.musahaf.utils.extensions.viewModelOf
 import co.jp.smagroup.musahaf.utils.quranSpecialSimple
 import co.jp.smagroup.musahaf.utils.toLocalizedNumber
+import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.android.resoures.Stringify
 import com.codebox.lib.android.utils.isRightToLeft
 import com.codebox.lib.android.viewGroup.inflater
 import com.codebox.lib.android.views.utils.gone
-import com.codebox.lib.android.widgets.longToast
 import com.codebox.lib.extrenalLib.TinyDB
 import kotlinx.android.synthetic.main.item_read_quran.view.*
 import kotlinx.android.synthetic.main.item_read_quran_full_page.view.*
@@ -268,14 +268,20 @@ class ReadQuranPagerAdapter(
                 })
             }
         } else
-            longToast("Please select at least one word")
+            CustomToast.makeLong(readQuranActivity, R.string.select_word_leaset)
     }
 
 
     override fun popupItemClicked(aya: Aya, view: ImageView) {
         val numberInMusahaf = aya.number
         when (view.id) {
-            R.id.bookmark_popup -> readQuranActivity.updateBookmarkState(aya)
+            R.id.bookmark_popup -> {
+                //Aya.isBookmarked is true then it's must be removed.
+                if (aya.isBookmarked) CustomToast.makeShort(readQuranActivity, R.string.bookmark_removed)
+                else CustomToast.makeShort(readQuranActivity, R.string.bookmard_saved)
+
+                readQuranActivity.updateBookmarkState(aya)
+            }
 
             R.id.share_popup -> {
                 val shareTextFormatted =

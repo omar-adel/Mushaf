@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <application
             android:name=".ui.commen.MusahafApplication"
             android:allowBackup="false"
@@ -19,16 +19,21 @@
             tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ui.search.SearchActivity">
         </activity>
-        <activity android:name=".ui.library.read.ReadLibraryActivity"/>
+        <activity android:name=".ui.library.read.ReadLibraryActivity" android:exported="true"/>
+
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data android:name="android.app.shortcuts"
+                       android:resource="@xml/shortcuts"/>
         </activity>
+
         <activity android:name=".ui.quran.read.ReadQuranActivity"/>
         <activity android:name=".ui.library.manage.ManageLibraryActivity"/>
+        <activity android:name=".ui.commen.ShortcutsActivity"
+                  android:exported="true"/>
 
     </application>
 

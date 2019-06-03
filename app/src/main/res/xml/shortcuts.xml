@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut
+      android:shortcutId="lastPage"
+      android:enabled="true"
+      android:icon="@drawable/ic_shortcut_lastpage"
+      android:shortcutShortLabel="@string/last_page"
+      android:shortcutLongLabel="@string/last_page">
+    <intent
+        android:action="co.jp.smagroup.musahaf.ui.commen.last_page"
+        android:targetPackage="co.jp.smagroup.musahaf"
+        android:targetClass="co.jp.smagroup.musahaf.ui.commen.ShortcutsActivity"
+        />
+  </shortcut>
+</shortcuts>

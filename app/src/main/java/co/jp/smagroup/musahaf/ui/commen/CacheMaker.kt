@@ -50,7 +50,6 @@ class CacheMaker {
         preferences.put(cacheKey, serializedData)
     }
 
-
     companion object {
         private const val cacheVersion = 1
         private const val cacheVersionKey = "Cache-Version-Key"

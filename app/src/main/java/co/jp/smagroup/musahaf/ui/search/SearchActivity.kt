@@ -5,7 +5,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.CompoundButton
 import androidx.core.view.isVisible
 import co.jp.smagroup.musahaf.R
-import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
 import co.jp.smagroup.musahaf.framework.utils.TextTypeOpt
 import co.jp.smagroup.musahaf.model.Aya
@@ -16,10 +15,10 @@ import co.jp.smagroup.musahaf.ui.quran.QuranViewModel
 import co.jp.smagroup.musahaf.utils.extensions.checked
 import co.jp.smagroup.musahaf.utils.extensions.unChecked
 import co.jp.smagroup.musahaf.utils.removeAllPunctuation
+import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.android.views.listeners.onClick
 import com.codebox.lib.android.views.utils.gone
 import com.codebox.lib.android.views.utils.visible
-import com.codebox.lib.android.widgets.shortToast
 import com.codebox.lib.standard.stringsUtils.match
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.*
@@ -36,6 +35,7 @@ class SearchActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
     private val job = SupervisorJob()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
+    private var quranWithoutTashkil = listOf<Aya>()
 
     init {
         MusahafApplication.appComponent.inject(this)
@@ -47,7 +47,9 @@ class SearchActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
         initGroupChipListener()
         initSearch()
         back_button_search.onClick { finish() }
-
+        coroutineScope.launch(Dispatchers.IO) {
+           quranWithoutTashkil = QuranViewModel.QuranDataList.onEach { it.text = it.text.removeAllPunctuation() }
+        }
     }
 
 
@@ -61,13 +63,16 @@ class SearchActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
                         val searchQuery = search_text_input.text.toString()
                         when (searchType) {
                             Edition.Quran -> {
-                                val searchResult =
-                                    withContext(Dispatchers.IO) {
-                                        QuranViewModel.QuranDataList.filter {
-                                            it.text.removeAllPunctuation().match(searchQuery)
+                                if (quranWithoutTashkil.isNotEmpty()) {
+                                    val searchResult =
+                                        withContext(Dispatchers.IO) {
+                                            quranWithoutTashkil.filter {
+                                                it.text.match(searchQuery)
+                                            }
                                         }
-                                    }
-                                dispatchSearchResult(searchResult, searchQuery)
+                                    dispatchSearchResult(searchResult, searchQuery)
+                                } else
+                                    CustomToast.makeShort(this@SearchActivity, R.string.wait)
                             }
                             else -> {
                                 val searchResult = withContext(Dispatchers.IO) {
@@ -80,9 +85,9 @@ class SearchActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
                             }
                         }
                     } else if (loading_search_result.isVisible)
-                        shortToast(getString(R.string.wait))
+                        CustomToast.makeShort(this@SearchActivity, R.string.wait)
                     else
-                        shortToast(getString(R.string.empty_search_query))
+                        CustomToast.makeShort(this@SearchActivity, R.string.empty_search_query)
                 }
             }
             true

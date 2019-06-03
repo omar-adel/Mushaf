@@ -29,6 +29,7 @@ buildscript {
         exoplayer_version = "2.9.6"
         multiDex_version = "2.0.1"
         fetch_version = '3.1.0'
+        shortbread_version = '1.0.2'
     }
     repositories {
         google()

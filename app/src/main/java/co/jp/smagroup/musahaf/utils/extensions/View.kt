@@ -18,6 +18,13 @@ import com.google.android.material.textfield.TextInputEditText
  */
 
 
+inline fun <T:View> T.onLongClick(crossinline block: T.() -> Unit) {
+    setOnLongClickListener {
+        block()
+        false
+    }
+}
+
 inline fun <T:View> onClicks(vararg views: T, crossinline block: T.() -> Unit) {
     for (view in views)
         view.onClick(block)

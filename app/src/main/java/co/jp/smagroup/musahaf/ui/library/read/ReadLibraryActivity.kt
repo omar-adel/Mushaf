@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import androidx.core.view.GravityCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.jp.smagroup.musahaf.R
 import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
@@ -24,11 +25,11 @@ import co.jp.smagroup.musahaf.ui.commen.PreferencesConstants
 import co.jp.smagroup.musahaf.utils.RecyclerViewItemClickedListener
 import co.jp.smagroup.musahaf.utils.extensions.onScroll
 import co.jp.smagroup.musahaf.utils.toLocalizedNumber
+import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.android.resoures.Colour
-import com.codebox.lib.android.utils.AppPreferences
 import com.codebox.lib.android.utils.isRightToLeft
 import com.codebox.lib.android.utils.screenHelpers.dp
-import com.codebox.lib.android.widgets.shortToast
+import com.github.zawadz88.materialpopupmenu.MaterialPopupMenu
 import com.github.zawadz88.materialpopupmenu.popupMenu
 import kotlinx.android.synthetic.main.activity_read_library.*
 import kotlinx.android.synthetic.main.content_library_read.*
@@ -50,7 +51,6 @@ class ReadLibraryActivity : BaseActivity() {
     private lateinit var readAdapter: ReadLibraryAdapter
     private var editionName = ""
     private var scrollPosition = 0
-    private var preferences = AppPreferences()
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -183,7 +183,7 @@ class ReadLibraryActivity : BaseActivity() {
         }
         readSurahData.clear()
         readSurahData.addAll(dataToAdd)
-
+        initAyaNumberPopup()
         Log.d("Read GET", readSurahData.size.toString())
         readAdapter.notifyDataSetChanged()
 
@@ -209,15 +209,19 @@ class ReadLibraryActivity : BaseActivity() {
             theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true)
         } else theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
         fastScrollButton.setBackgroundResource(outValue.resourceId)
+        if (isRightToLeft == 1) fastScrollButton.updatePadding(right = dp(16))
+        else fastScrollButton.updatePadding(left = dp(16))
+
+
 
         fastScrollButton.setImageResource(R.drawable.ic_move_to_page)
-        fastScrollButton.setOnClickListener { createAyaNumberPopup(fastScrollButton) }
+        fastScrollButton.setOnClickListener { showAyaNumberPopup(fastScrollButton) }
         fastScrollButton.setColorFilter(if (MusahafApplication.isDarkThemeEnabled) Color.WHITE else Color.BLACK)
     }
-
-    private fun createAyaNumberPopup(view: View) {
+    private var ayaPopupMenu :MaterialPopupMenu?=null
+    private fun initAyaNumberPopup() {
         if (readSurahData.isNotEmpty()) {
-            val popupMenu = popupMenu {
+            ayaPopupMenu = popupMenu {
                 if (MusahafApplication.isDarkThemeEnabled)
                     style = R.style.Widget_MPM_Menu_Dark_DarkBackground
                 section {
@@ -231,11 +235,18 @@ class ReadLibraryActivity : BaseActivity() {
                         }
                 }
             }
-            popupMenu.show(this, view)
         } else
-            shortToast(getString(R.string.wait))
+            CustomToast.makeShort(this, R.string.wait)
     }
 
+    private fun showAyaNumberPopup(anchorView: View){
+        if(ayaPopupMenu != null) ayaPopupMenu!!.show(this, anchorView)
+        else{
+            initAyaNumberPopup()
+            showAyaNumberPopup(anchorView)
+        }
+
+    }
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         if (menuItem.itemId == android.R.id.home) drawer.openDrawer(GravityCompat.START)
         return true

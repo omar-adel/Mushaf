@@ -117,6 +117,11 @@
     <string name="low">Low</string>
     <string name="medium">Medium</string>
     <string name="high">High</string>
+    <string name="select_word_leaset">Please select at least one word</string>
+    <string name="bookmark_removed">Bookmarked removed</string>
+    <string name="bookmard_saved">Bookmark saved</string>
+    <string name="shortcut_created">Shortcut Created</string>
+    <string name="unable_to_add_shortcut">Unable to add a shortcut</string>
 
 
 </resources>

@@ -12,12 +12,13 @@ import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import co.jp.smagroup.musahaf.utils.LocaleHelper
+import com.codebox.lib.android.utils.AppPreferences
 
 /**
  * Created by ${User} on ${Date}
  */
 abstract class BaseActivity(private val isRequiringFullScreen: Boolean = false) : AppCompatActivity() {
-
+    val preferences =AppPreferences()
     var currentSystemVisibility: Boolean = false
         protected set
     private var initialLocale: String? = null

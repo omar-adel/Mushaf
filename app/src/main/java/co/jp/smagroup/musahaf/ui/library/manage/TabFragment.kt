@@ -12,6 +12,7 @@ import co.jp.smagroup.musahaf.ui.commen.ViewModelFactory
 import co.jp.smagroup.musahaf.ui.commen.dialog.ProgressDialog
 import co.jp.smagroup.musahaf.utils.extensions.observer
 import co.jp.smagroup.musahaf.utils.extensions.viewModelOf
+import com.codebox.lib.android.widgets.recyclerView.onScroll
 import kotlinx.android.synthetic.main.fragment_tab.*
 import javax.inject.Inject
 
@@ -39,10 +40,9 @@ class TabFragment : BaseFragment() {
             if (it.isNotEmpty()) {
                 val data = filterDataByTabPosition(it)
                 recycler_library_manage.adapter = getRecyclerAdapter(data)
+                recycler_library_manage.scrollToPosition(recyclerViewPosition)
                 loadingCompleted(false)
-            } else {
-                loadingCompleted(true)
-            }
+            } else loadingCompleted(true)
         }
         loadData()
     }
@@ -53,8 +53,13 @@ class TabFragment : BaseFragment() {
                 //Do nothing
             } else
                 downloadMusahaf(editionIdentifier, downloadingState)
-
         })
+
+        recycler_library_manage.onScroll { dx, dy ->
+            recyclerViewPosition =
+                (recycler_library_manage.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        }
+
         return adapter
     }
 
@@ -76,8 +81,6 @@ class TabFragment : BaseFragment() {
 
                 override fun onCancelled() = viewModel.updateDataDownloadState(editionIdentifier)
                 override fun onSuccess() = viewModel.updateDataDownloadState(editionIdentifier)
-                override fun onFinish() = recycler_library_manage.scrollToPosition(recyclerViewPosition)
-
                 override suspend fun downloadManger(): String {
                     viewModel.downloadMusahaf(
                         editionIdentifier,
@@ -87,9 +90,6 @@ class TabFragment : BaseFragment() {
                     return editionIdentifier
                 }
             }
-            // Save state
-            recyclerViewPosition =
-                (recycler_library_manage.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
             progressDialog.show(activity?.supportFragmentManager!!, ProgressDialog.TAG)
         }
     }
