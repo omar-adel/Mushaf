@@ -129,7 +129,7 @@ class ReciterPlayer(
     }
 
     private fun playOnline(playRange: IntRange, selectedReciterId: String, eachVerse: Int, wholeSet: Int) {
-        val links = MediaSourceBuilder.linksGenerator(playRange, selectedReciterId,true)
+        val links = MediaSourceBuilder.linksGenerator(playRange, selectedReciterId)
         val mediaSource = MediaSourceBuilder.onlineSource(links, eachVerse, wholeSet)
         readQuranActivity.setExoPLayerMediaSource(mediaSource, playList)
     }

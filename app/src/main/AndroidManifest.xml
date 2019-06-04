@@ -30,7 +30,8 @@
                        android:resource="@xml/shortcuts"/>
         </activity>
 
-        <activity android:name=".ui.quran.read.ReadQuranActivity"/>
+        <activity android:name=".ui.quran.read.ReadQuranActivity"
+                  android:launchMode="singleTask"/>
         <activity android:name=".ui.library.manage.ManageLibraryActivity"/>
         <activity android:name=".ui.commen.ShortcutsActivity"
                   android:exported="true"/>

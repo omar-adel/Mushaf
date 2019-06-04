@@ -300,8 +300,7 @@ class ReadQuranPagerAdapter(
     private fun getTranslation(numberInMusahaf: Int) {
         coroutineScope.launch {
             val downloadedEditions =
-                withContext(Dispatchers.IO) { readQuranActivity.repository.getDownloadedEditions() }.filter { it.format != MusahafConstants.Text }
-                    .toMutableList()
+                withContext(Dispatchers.IO) { readQuranActivity.repository.getDownloadedEditions() }.filter { it.format == MusahafConstants.Text }.toMutableList()
             val selectedTranslation = tinyDb.getListString(PreferencesConstants.LastUsedTranslation)
             val selectedEditions: MutableList<Edition> = mutableListOf()
             val unSelectedEditions: MutableList<Edition>

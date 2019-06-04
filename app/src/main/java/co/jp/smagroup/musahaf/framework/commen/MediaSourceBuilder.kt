@@ -17,7 +17,7 @@ import com.google.android.exoplayer2.upstream.FileDataSource
 import com.google.android.exoplayer2.util.Util
 
 object MediaSourceBuilder {
-   private val preferences = AppPreferences()
+    private val preferences = AppPreferences()
 
     private val qualityValues = arrayOf("low", "", "high")
 
@@ -72,27 +72,25 @@ object MediaSourceBuilder {
 
     fun linksGenerator(
         selectedAyaRange: IntRange,
-        reciterIdentifier: String,
-        audioQualityOnLinks: Boolean
-    ): Array<String> {
+        reciterIdentifier: String): Array<String> {
         val urlArray = mutableListOf<String>()
-        val quality =if (audioQualityOnLinks) getAudioQuality() else ""
+        val quality = getAudioQuality()
         if (selectedAyaRange.start != selectedAyaRange.last)
             for (aya in selectedAyaRange) {
-                val url = "http://cdn.alquran.cloud/media/audio/ayah/$reciterIdentifier/$aya/$quality"
+                val url = "http://cdn.alquran.cloud/media/audio/ayah/$reciterIdentifier/$aya$quality"
                 urlArray.add(url)
             }
         else
-            urlArray.add("http://cdn.alquran.cloud/media/audio/ayah/$reciterIdentifier/${selectedAyaRange.start}/$quality")
+            urlArray.add("http://cdn.alquran.cloud/media/audio/ayah/$reciterIdentifier/${selectedAyaRange.start}$quality")
         return urlArray.toTypedArray()
     }
 
     private fun getAudioQuality(): String {
-        val audioQuality =  preferences.getInt(SettingsPreferencesConstant.AudioQualityKey, 1)
-        return qualityValues[audioQuality]
+        val audioQuality = preferences.getInt(SettingsPreferencesConstant.AudioQualityKey, 1)
+        return if (audioQuality == 1) qualityValues[audioQuality] else "/ ${qualityValues[audioQuality]}"
     }
 
-  fun linkGenerator(ayaNumber: Int, reciterIdentifier: String): String =
+    fun linkGenerator(ayaNumber: Int, reciterIdentifier: String): String =
         "http://cdn.alquran.cloud/media/audio/ayah/$reciterIdentifier/$ayaNumber"
 
 }

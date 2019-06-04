@@ -7,11 +7,13 @@ import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
 import co.jp.smagroup.musahaf.model.Aya
 import co.jp.smagroup.musahaf.ui.commen.CacheMaker
+import com.codebox.lib.standard.collections.filters.singleIdx
 import kotlinx.serialization.list
 import kotlinx.coroutines.*
 import kotlinx.serialization.UnstableDefault
 
 class QuranViewModel(private val repository: Repository) : ViewModel() {
+
     @UnstableDefault
     private val cacheMaker = CacheMaker()
     private val job = SupervisorJob()
@@ -46,21 +48,20 @@ class QuranViewModel(private val repository: Repository) : ViewModel() {
         cacheMaker.saveList(MusahafConstants.MainMusahaf, Aya.serializer().list, QuranDataList)
     }
 
-
     fun updateBookmarkStateInData(aya: Aya) {
-        val index = QuranDataList.indexOf(aya)
-        aya.isBookmarked = !aya.isBookmarked
+        val (oldAya,index) = QuranDataList.singleIdx { it.number == aya.number }
+        oldAya.isBookmarked = !aya.isBookmarked
         val newDatList = QuranDataList.toMutableList()
         newDatList[index] = aya
         QuranDataList = newDatList
         coroutineScope.launch { saveAyatArrayToCache() }
     }
 
-
     @Suppress("FunctionName")
     private fun _getMainMusahaf(): LiveData<List<Aya>> {
         if (!::_mainMusahaf.isInitialized)
             _mainMusahaf = MutableLiveData()
+
         return _mainMusahaf
     }
 

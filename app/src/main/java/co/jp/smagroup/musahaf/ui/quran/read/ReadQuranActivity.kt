@@ -3,12 +3,14 @@ package co.jp.smagroup.musahaf.ui.quran.read
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.NestedScrollView
@@ -20,6 +22,9 @@ import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
 import co.jp.smagroup.musahaf.ui.commen.PreferencesConstants
 import co.jp.smagroup.musahaf.ui.commen.ViewModelFactory
 import co.jp.smagroup.musahaf.ui.quran.QuranViewModel
+import co.jp.smagroup.musahaf.ui.quran.read.reciter.Constants.PLAYBACK_CHANNEL_ID
+import co.jp.smagroup.musahaf.ui.quran.read.reciter.Constants.PLAYBACK_NOTIFICATION_ID
+import co.jp.smagroup.musahaf.ui.quran.read.reciter.DescriptionAdapter
 import co.jp.smagroup.musahaf.ui.quran.read.reciter.DownloadingFragment
 import co.jp.smagroup.musahaf.ui.quran.read.reciter.ExoPlayerListener
 import co.jp.smagroup.musahaf.ui.quran.read.reciter.ReciterBottomSheet
@@ -38,6 +43,7 @@ import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.util.Util
 import io.reactivex.disposables.Disposable
@@ -60,6 +66,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
     lateinit var viewModelFactory: ViewModelFactory
     private var exoPlayer: ExoPlayer? = null
     private var playerListener: ExoPlayerListener? = null
+    private var playerNotificationManager: PlayerNotificationManager? = null
     private var playWhenReady = true
     private var doAfterPermission: unitFun? = null
     private var currentPageKey = "current read page"
@@ -68,6 +75,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
     private var disposable: Disposable? = null
     private val job: Job = SupervisorJob()
     val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main + job)
+
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,8 +144,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
     }
 
     private fun initializePlayer() {
-
-        if (exoPlayer == null) {
+        if (exoPlayer == null && currentPlayedAyat != null) {
             // a factory to create an AdaptiveVideoTrackSelection
             val adaptiveTrackSelectionFactory = AdaptiveTrackSelection.Factory()
 
@@ -166,6 +173,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
                 exoPlayer!!
             )
             exoPlayer!!.addListener(playerListener)
+            initNotificationManger(currentPlayedAyat!!, exoPlayer!!)
 
         }
 
@@ -185,6 +193,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
             currentWindow = it.currentWindowIndex
             playWhenReady = it.playWhenReady
             it.release()
+            playerNotificationManager?.setPlayer(null)
             it.removeListener(playerListener)
             exoPlayer = null
         }
@@ -195,7 +204,6 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         selectedAyat: List<Aya>
     ) {
         currentPlayedAyat = selectedAyat
-
         if (newMediaSource.notNull) {
             //Resetting the exoMediaSource and re-instantiate exo-player.
             exoMediaSource = null
@@ -207,6 +215,24 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         playPauseButton.setImageResource(R.drawable.ic_pause)
         playerView.show()
         exoMediaSource = newMediaSource
+    }
+
+    private fun initNotificationManger(playList: List<Aya>, exoPlayer: ExoPlayer) {
+        playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
+            this, PLAYBACK_CHANNEL_ID,
+            R.string.playback_channel_name,
+            PLAYBACK_NOTIFICATION_ID, DescriptionAdapter(playList, this)
+        )
+        playerNotificationManager!!.apply {
+            setOngoing(false)
+            setColor(Color.BLACK)
+
+            setColorized(true)
+            setUseChronometer(false)
+            setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
+            setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            setPlayer(exoPlayer)
+        }
     }
 
     override fun onClick(v: View) {
@@ -255,8 +281,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-        if (Util.SDK_INT > 23)
-            initializePlayer()
+        if (Util.SDK_INT > 23) initializePlayer()
     }
 
     override fun onPause() {
@@ -294,9 +319,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
 
     override fun onStop() {
         super.onStop()
-        if (Util.SDK_INT > 23) {
-            releasePlayer()
-        }
+        if (Util.SDK_INT > 23) releasePlayer()
     }
 
     override fun onDestroy() {
@@ -309,6 +332,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         super.onBackPressed()
         exoMediaSource = null
         currentPlayedAyat = null
+        releasePlayer()
         DownloadingFragment.playerDownloadingCancelled.onNext(true)
     }
 

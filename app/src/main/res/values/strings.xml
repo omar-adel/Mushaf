@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Musahaf</string>
     <string name="app_version" translatable="false">V1.0</string>
+    <string name="playback_channel_name" translatable="false">Playback</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="surah">Surah</string>
