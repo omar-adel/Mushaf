@@ -35,7 +35,7 @@ class SearchActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
     private val job = SupervisorJob()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
-    private var quranWithoutTashkil = listOf<Aya>()
+    private var quranWithoutTashkil = mutableListOf<Aya>()
 
     init {
         MusahafApplication.appComponent.inject(this)
@@ -48,7 +48,10 @@ class SearchActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
         initSearch()
         back_button_search.onClick { finish() }
         coroutineScope.launch(Dispatchers.IO) {
-           quranWithoutTashkil = QuranViewModel.QuranDataList.onEach { it.text = it.text.removeAllPunctuation() }
+            for (index in 0 until QuranViewModel.QuranDataList.size) {
+                val aya = QuranViewModel.QuranDataList[index]
+                quranWithoutTashkil.add(aya.copy(text = aya.text.removeAllPunctuation()))
+            }
         }
     }
 

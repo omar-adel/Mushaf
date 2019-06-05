@@ -65,7 +65,7 @@ class ReadLibraryAdapter(private val dataList: MutableList<ReadTranslation>, pri
             itemView.aya_number_library.text = readTranslation.numberInSurah.toString().toLocalizedNumber()
 
             itemView.item_read_library_root_view.onClick {
-                createPopup(readTranslation, context as BaseActivity)
+                createPopup(readTranslation, context as BaseActivity,position)
             }
             if (isLastPosition)
                 itemView.divider_item_library.invisible()
@@ -78,7 +78,7 @@ class ReadLibraryAdapter(private val dataList: MutableList<ReadTranslation>, pri
             else itemView.aya_number_library.setTextColor(Colour(R.color.colorSecondary))
         }
 
-        private fun createPopup(readTranslation: ReadTranslation, activity: BaseActivity) {
+        private fun createPopup(readTranslation: ReadTranslation, activity: BaseActivity,index: Int) {
             val popupMenu = popupMenu {
                 if (MusahafApplication.isDarkThemeEnabled)
                     style = R.style.Widget_MPM_Menu_Dark_DarkBackground
@@ -103,16 +103,9 @@ class ReadLibraryAdapter(private val dataList: MutableList<ReadTranslation>, pri
                     item {
                         label = Stringify(R.string.save_in_bookmarks, activity)
                         callback = {
-                            val oldDataIdx = dataList.indexOf(readTranslation)
-
-                            val newData = readTranslation.copy(isBookmarked = !readTranslation.isBookmarked)
-                            dataList[oldDataIdx] = newData
-
-                            repository.updateBookmarkStatus(
-                                readTranslation.ayaNumber,
-                                readTranslation.editionInfo.identifier,
-                                !readTranslation.isBookmarked
-                            )
+                            val oldData = dataList[index]
+                            val newData =   oldData.copy(isBookmarked = !oldData.isBookmarked)
+                            dataList[index] = newData
 
                             if (newData.isBookmarked) {
                                 CustomToast.makeShort(itemView.context, R.string.bookmard_saved)
@@ -120,8 +113,12 @@ class ReadLibraryAdapter(private val dataList: MutableList<ReadTranslation>, pri
                             } else {
                                 CustomToast.makeShort(itemView.context, R.string.bookmark_removed)
                                 updateViewToBookmarked(false)
-
                             }
+                            repository.updateBookmarkStatus(
+                                readTranslation.ayaNumber,
+                                readTranslation.editionInfo.identifier,
+                                newData.isBookmarked
+                            )
                         }
                     }
                 }
