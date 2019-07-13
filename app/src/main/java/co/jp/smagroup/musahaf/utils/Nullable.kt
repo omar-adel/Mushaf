@@ -9,9 +9,7 @@ import kotlin.contracts.contract
 
 @UseExperimental(ExperimentalContracts::class)
 val Any?.notNull: Boolean
-    get() {
-      contract { returns(true) implies (this@notNull != null) }
-        return this != null
-    }
+    get() = this != null
+
 val Any?.isNull: Boolean
     get() = this == null

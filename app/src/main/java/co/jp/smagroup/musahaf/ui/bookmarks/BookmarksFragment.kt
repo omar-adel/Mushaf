@@ -2,12 +2,13 @@ package co.jp.smagroup.musahaf.ui.bookmarks
 
 import android.os.Bundle
 import co.jp.smagroup.musahaf.R
-import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
+import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
 import co.jp.smagroup.musahaf.model.Aya
 import co.jp.smagroup.musahaf.ui.MainActivity
 import co.jp.smagroup.musahaf.ui.commen.BaseActivity
 import co.jp.smagroup.musahaf.ui.commen.BaseFragment
+import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
 import co.jp.smagroup.musahaf.ui.commen.ViewModelFactory
 import co.jp.smagroup.musahaf.ui.quran.QuranViewModel
 import co.jp.smagroup.musahaf.utils.extensions.viewModelOf
@@ -34,10 +35,12 @@ class BookmarksFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_bookmarks
     private var deletedAyaIndex = -1
-    private var deletedAya: Aya?=null
+    private var deletedAya: Aya? = null
     private var dataList = mutableListOf<Aya>()
     private lateinit var bookmarksAdapter: BookmarksAdapter
     private var isUserUndoDeleting = false
+    private val toDelete = mutableListOf<Aya>()
+
     init {
         MusahafApplication.appComponent.inject(this)
     }
@@ -53,8 +56,7 @@ class BookmarksFragment : BaseFragment() {
             empty_data_text.gone()
             bookmarksAdapter = BookmarksAdapter(dataList, this@BookmarksFragment)
             recycler_bookmarks.adapter = bookmarksAdapter
-        } else
-            empty_data_text.visible()
+        } else empty_data_text.visible()
     }
 
 
@@ -72,51 +74,59 @@ class BookmarksFragment : BaseFragment() {
         coroutineScope.launch {
             val newData = withContext(Dispatchers.IO) { repository.getAllByBookmarkStatus(true) }
             dataList = newData
+            dataList.sortBy { it.edition!!.type }
             dispatchBookmarkData()
         }
     }
 
 
-        fun removeBookmarked(aya: Aya) {
-            deletedAya = aya
-            deletedAyaIndex = dataList.indexOf(aya)
-            dataList.remove(aya)
-            bookmarksAdapter.notifyItemRemoved(deletedAyaIndex)
-            bookmarksAdapter.notifyItemRangeChanged(deletedAyaIndex, dataList.size)
-            activeDeleteAyaAction()
+    fun removeBookmarked(aya: Aya) {
+        deletedAya = aya
+        deletedAyaIndex = dataList.indexOf(aya)
+        dataList.remove(aya)
+        bookmarksAdapter.notifyItemRemoved(deletedAyaIndex)
+        bookmarksAdapter.notifyItemRangeChanged(deletedAyaIndex, dataList.size)
+        activeDeleteAyaAction()
+    }
+
+    private fun activeDeleteAyaAction() {
+        val snackbar = (activity as BaseActivity).snackbar(getString(R.string.remove_bookmark)).material()
+
+        snackbar.showAction(getString(R.string.undo), actionTextColor = Colour(R.color.colorSecondary)) {
+            restoreDeletedAya()
         }
 
-        private fun activeDeleteAyaAction() {
-            val snackbar = (activity as BaseActivity).snackbar(getString(R.string.remove_bookmark)).material()
-
-            snackbar.showAction(getString(R.string.undo), actionTextColor = Colour(R.color.colorSecondary)) {
-                restoreDeletedAya()
+        snackbar.onDismissed {
+            if (!isUserUndoDeleting) {
+                deletePermanently()
             }
+            isUserUndoDeleting = false
+        }
+    }
 
-            snackbar.onDismissed {
-                if (!isUserUndoDeleting) {
-                    deletePermanently()
-                }
-                isUserUndoDeleting = false
-            }
+    private fun deletePermanently() {
+        deletedAya?.let {
+            toDelete.add(it)
+            deletedAya = null
+            if (dataList.isEmpty()) empty_data_text.visible()
+        }
+    }
+
+    private fun updateBookmarkResuources(){
+        for (aya in toDelete) {
+            if (aya.edition!!.identifier == MusahafConstants.MainMusahaf)
+                quranViewModel.updateBookmarkStateInData(aya)
+            repository.updateBookmarkStatus(aya.number,aya.edition!!.identifier, !aya.isBookmarked)
+
         }
 
-        private fun deletePermanently() {
-            deletedAya?.let {
-                repository.updateBookmarkStatus(it.number,it.edition!!.identifier, !it.isBookmarked)
-                quranViewModel.updateBookmarkStateInData(it)
-                deletedAya = null
-                if (dataList.isEmpty()) empty_data_text.visible()
-            }
+    }
 
-        }
-
-        private fun restoreDeletedAya() {
-            isUserUndoDeleting = true
-            dataList.add(deletedAyaIndex, deletedAya!!)
-            bookmarksAdapter.notifyItemInserted(deletedAyaIndex)
-            bookmarksAdapter.notifyItemRangeChanged(deletedAyaIndex, dataList.size)
-        }
-
+    private fun restoreDeletedAya() {
+        isUserUndoDeleting = true
+        dataList.add(deletedAyaIndex, deletedAya!!)
+        bookmarksAdapter.notifyItemInserted(deletedAyaIndex)
+        bookmarksAdapter.notifyItemRangeChanged(deletedAyaIndex, dataList.size)
+    }
 
 }

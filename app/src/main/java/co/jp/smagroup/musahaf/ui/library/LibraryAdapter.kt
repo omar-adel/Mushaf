@@ -71,7 +71,7 @@ class LibraryAdapter(private val dataList: List<Edition>) : RecyclerView.Adapter
                     style = R.style.Widget_MPM_Menu_Dark_DarkBackground
                 section {
                     item {
-                        label = "Add shortcut to home screen"
+                        label = context.getString(R.string.add_shortcut)
                         callback =
                             {
                                 val shortcutDetails =

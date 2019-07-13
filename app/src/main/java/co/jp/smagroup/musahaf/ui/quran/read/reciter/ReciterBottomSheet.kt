@@ -60,7 +60,7 @@ class ReciterBottomSheet : BottomSheetDialogFragment(), AdapterView.OnItemSelect
 
         parentActivity = activity as ReadQuranActivity
         parentActivity.coroutineScope.launch {
-            var data = repository.getEditionsByType(MusahafConstants.Audio, false).removeSomeReciters()
+            var data = repository.getAvailableReciters()
             if (isRightToLeft != 1) data = data.map { it.copy(name = it.identifier.toArabicReciterName(it.name)) }
 
             reciters.addAll(data)
@@ -242,12 +242,6 @@ class ReciterBottomSheet : BottomSheetDialogFragment(), AdapterView.OnItemSelect
     override fun onDestroy() {
         super.onDestroy()
         (activity as BaseActivity).systemUiVisibility(true)
-    }
-
-    //Removing some reciters due to incorrect in reciting.
-    private fun List<Edition>.removeSomeReciters(): List<Edition> {
-        val data = this.toMutableList()
-        return data.filter { it.identifier != "ar.ahmedajamy" || it.identifier != "ar.mahermuaiqly" }
     }
 
     companion object {

@@ -7,10 +7,10 @@ import com.codebox.lib.android.utils.isRightToLeft
 const val spacedChar = "\u0640"
 const val miniAlef = "\u0670"
 
-//function source: https://stackoverflow.com/questions/18580287/how-could-i-remove-arabic-punctuation-form-a-string-in-java
 
+//function source: https://stackoverflow.com/questions/18580287/how-could-i-remove-arabic-punctuation-form-a-string-in-java
 //more details on:https://stackoverflow.com/a/23028130/6470661
-private val punctuationArray = arrayOf(
+val punctuationArray = arrayOf(
     "\u0610",
     "\u0611",
     "\u0612",
@@ -84,6 +84,7 @@ private var numbers = arrayOf(
 )
 private val reciterNames =
     arrayOf(
+        "ar.aymanswoaid" to "د.أيمن سويد",
         "ar.abdulbasitmurattal" to "عبد الباسط عبد الصمد المرتل",
         "ar.abdulsamad" to "عبدالباسط عبدالصمد",
         "ar.abdullahbasfar" to "عبد الله بصفر",
@@ -103,8 +104,8 @@ private val reciterNames =
         "ar.muhammadjibreel" to "محمد جبريل",
         "ar.saoodshuraym" to "سعود الشريم"
     )
-
 private val reciterNameEnglish = arrayOf(
+    "Ayman Sowaid" to "د.أيمن سويد",
     "Abdul Basit" to "عبد الباسط عبد الصمد المرتل",
     "Abdul Samad" to "عبدالباسط عبدالصمد",
     "Abdullah Basfar" to "عبد الله بصفر",
@@ -125,12 +126,12 @@ private val reciterNameEnglish = arrayOf(
     "Saood bin Ibraaheem Ash-Shuraym" to "سعود الشريم"
 )
 
-fun String.toLocalizedRevelation()=
-        when (this) {
-            "Meccan" -> if (isRightToLeft == 1) this else "مكية"
-            // "Medinan"
-            else -> if (isRightToLeft == 1) this else "مدنية"
-        }
+fun String.toLocalizedRevelation() =
+    when (this) {
+        "Meccan" -> if (isRightToLeft == 1) this else "مكية"
+        // "Medinan"
+        else -> if (isRightToLeft == 1) this else "مدنية"
+    }
 
 fun Int.getAyaWord() =
     if (isRightToLeft != 1) {
@@ -173,7 +174,7 @@ fun String.toArabicReciterName(originalName: String): String {
 
 fun String.toEnglishReciterName(): String {
     var output = this
-    for ((englishName,arabicName ) in reciterNameEnglish)
+    for ((englishName, arabicName) in reciterNameEnglish)
         if (this == arabicName) {
             output = englishName
             break
@@ -218,7 +219,7 @@ fun String.removePunctuation(): String {
 
 fun String.removeAllPunctuation(): String {
     var output = this.replace(miniAlef, "ا")
-     output = output.replace("ٱ", "ا")
+    output = output.replace("ٱ", "ا")
 
     for (punct in punctuationArray) {
 

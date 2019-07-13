@@ -1,5 +1,6 @@
 package co.jp.smagroup.musahaf.framework.api
 
+import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.utils.EditionTypeOpt
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
@@ -13,22 +14,22 @@ interface QuranCloudAPI {
     @GET("juz/{juz}/{edition}?in_client_id=rgZIdzuXTueT0uzhNXXCOzo0KVc2twCv")
     fun getQuran(
         @Path("juz") juz: Int,
-        @Path("edition") identifier: String = "quran-uthmani"
+        @Path("edition") identifier: String = MusahafConstants.MainMusahaf
     ): Deferred<Response<ApiModels.QuranApi>>
 
     //http://api.alquran.cloud/v1/edition/language
     @GET("edition/language")
     fun getSupportedLanguage(): Deferred<Response<ApiModels.SupportedLanguage>>
 
-   //http://api.alquran.cloud/v1/edition/format/audio#
-   // http://api.alquran.cloud/v1/edition?format=en&language=audio
-   //http://api.alquran.cloud/v1/edition?format=text&language=ar
+    //http://api.alquran.cloud/v1/edition/format/audio#
+    // http://api.alquran.cloud/v1/edition?format=en&language=audio
+    //http://api.alquran.cloud/v1/edition?format=text&language=ar
     @GET("edition")
     fun getEditions(
         @Query("format") format: String,
         @Query("language") language: String
     ): Deferred<Response<ApiModels.Editions>>
-    
+
     @GET("edition")
     fun getAllEditions(): Deferred<Response<ApiModels.Editions>>
 
@@ -36,7 +37,7 @@ interface QuranCloudAPI {
     fun getEditionsByType(
         @EditionTypeOpt
         @Query("format")
-        type:String
+        type: String
     ): Deferred<Response<ApiModels.Editions>>
 
 }

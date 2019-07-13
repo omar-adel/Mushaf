@@ -43,7 +43,7 @@ class QuranPageInitializer(private val textAction: FunctionalQuranText, context:
                             pageText = TextUtils.concat(
                                 pageText,
                                 textAction.getQuranDecoratedText(
-                                    "${whiteSpaceMagnifier(aya.text)} ${aya.numberInSurah.toString().toLocalizedNumber()} ",
+                                    "${whiteSpaceMagnifier(aya.text)} ${aya.numberInSurah.toLocalizedNumber()} ",
                                     pageText.length,
                                     aya
                                 )
@@ -65,7 +65,7 @@ class QuranPageInitializer(private val textAction: FunctionalQuranText, context:
 
                 val decoratedText =
                     textAction.getQuranDecoratedText(
-                        "$spacedAyaText ${aya.numberInSurah.toString().toLocalizedNumber()} ",
+                        "$spacedAyaText ${aya.numberInSurah.toLocalizedNumber()} ",
                         pageText.length,
                         aya
                     )

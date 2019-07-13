@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          android:installLocation="auto"
-          package="co.jp.smagroup.musahaf">
+          package="co.jp.smagroup.musahaf"
+          android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+
     <application
             android:name=".ui.commen.MusahafApplication"
             android:allowBackup="false"
@@ -17,25 +18,32 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".openSourceLicenses.OpenSourceLicenseActivity">
+        </activity>
         <activity android:name=".ui.search.SearchActivity">
         </activity>
-        <activity android:name=".ui.library.read.ReadLibraryActivity" android:exported="true"/>
-
+        <activity
+                android:name=".ui.library.read.ReadLibraryActivity"
+                android:exported="true"/>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
-                       android:resource="@xml/shortcuts"/>
+
+            <meta-data
+                    android:name="android.app.shortcuts"
+                    android:resource="@xml/shortcuts"/>
         </activity>
-
-        <activity android:name=".ui.quran.read.ReadQuranActivity"
-                  android:launchMode="singleTask"/>
+        <activity
+                android:name=".ui.quran.read.ReadQuranActivity"
+                android:configChanges="screenSize|orientation"
+                android:launchMode="singleTask"/>
         <activity android:name=".ui.library.manage.ManageLibraryActivity"/>
-        <activity android:name=".ui.commen.ShortcutsActivity"
-                  android:exported="true"/>
-
+        <activity
+                android:name=".ui.commen.ShortcutsActivity"
+                android:exported="true"/>
     </application>
 
 </manifest>

@@ -1,17 +1,14 @@
 package co.jp.smagroup.musahaf.ui.quran.read
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.NestedScrollView
 import co.jp.smagroup.musahaf.R
@@ -35,7 +32,6 @@ import co.jp.smagroup.musahaf.utils.notNull
 import co.jp.smagroup.musahaf.utils.toLocalizedNumber
 import com.codebox.kidslab.Framework.Views.CustomToast
 import com.codebox.lib.android.utils.screenHelpers.dp
-import com.codebox.lib.standard.lambda.unitFun
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
@@ -68,7 +64,6 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
     private var playerListener: ExoPlayerListener? = null
     private var playerNotificationManager: PlayerNotificationManager? = null
     private var playWhenReady = true
-    private var doAfterPermission: unitFun? = null
     private var currentPageKey = "current read page"
     private lateinit var viewModel: QuranViewModel
 
@@ -155,13 +150,6 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
                 BANDWIDTH_METER
             )
             playerView.player = exoPlayer
-            //if exoMediaSource not null then resume player with previous media source. This happens when activity configuration changed or resumed.
-            if (exoMediaSource.notNull) resumePlayer()
-            //resting saved position for the new media source.
-            else {
-                currentWindow = 0
-                playbackPosition = 0
-            }
             exoPlayer!!.playWhenReady = true
             exoPlayer!!.seekTo(
                 currentWindow,
@@ -173,10 +161,18 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
                 exoPlayer!!
             )
             exoPlayer!!.addListener(playerListener)
-            initNotificationManger(currentPlayedAyat!!, exoPlayer!!)
-
+            if (exoMediaSource.notNull) {
+                //if exoMediaSource not null then resume player with previous media source. This happens when activity configuration changed or resumed.
+                resumePlayer()
+                initNotificationManger(currentPlayedAyat!!)
+            }
+            else {
+                //resting saved position for the new media source.
+                currentWindow = 0
+                playbackPosition = 0
+            }
+            playerNotificationManager!!.setPlayer(exoPlayer)
         }
-
     }
 
     private fun resumePlayer() {
@@ -204,6 +200,7 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         selectedAyat: List<Aya>
     ) {
         currentPlayedAyat = selectedAyat
+        initNotificationManger(selectedAyat)
         if (newMediaSource.notNull) {
             //Resetting the exoMediaSource and re-instantiate exo-player.
             exoMediaSource = null
@@ -217,21 +214,19 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         exoMediaSource = newMediaSource
     }
 
-    private fun initNotificationManger(playList: List<Aya>, exoPlayer: ExoPlayer) {
+    private fun initNotificationManger(playList: List<Aya>) {
         playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
             this, PLAYBACK_CHANNEL_ID,
             R.string.playback_channel_name,
             PLAYBACK_NOTIFICATION_ID, DescriptionAdapter(playList, this)
         )
         playerNotificationManager!!.apply {
-            setOngoing(false)
+            setOngoing(true)
             setColor(Color.BLACK)
-
             setColorized(true)
             setUseChronometer(false)
             setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
             setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-            setPlayer(exoPlayer)
         }
     }
 
@@ -260,23 +255,17 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         }
     }
 
-    fun executeWithPermission(block: unitFun) {
-        doAfterPermission = block
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            val result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            if (result == PackageManager.PERMISSION_GRANTED)
-                block.invoke()
-            else
-                requestForSpecificPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        } else {
-            block.invoke()
-        }
-    }
-
     private fun activateClickListener() {
         stopPlayer.setOnClickListener(this)
         playPauseButton.setOnClickListener(this)
         playerSettings.setOnClickListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        systemUiVisibility(true)
+        if (Util.SDK_INT <= 23)
+            initializePlayer()
     }
 
     override fun onStart() {
@@ -287,39 +276,6 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
     override fun onPause() {
         super.onPause()
         preferences.put(PreferencesConstants.LastSurahViewed, quranViewpager.currentItem)
-        if (Util.SDK_INT <= 23) {
-            releasePlayer()
-        }
-    }
-
-    private fun requestForSpecificPermission(vararg permissions: String) {
-        ActivityCompat.requestPermissions(
-            this,
-            permissions,
-            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
-        )
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                doAfterPermission?.invoke()
-            } else CustomToast.makeShort(this, "Cannot save audio files without the requested permission")
-        }
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        systemUiVisibility(true)
-        if (Util.SDK_INT <= 23 || exoPlayer == null) {
-            initializePlayer()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (Util.SDK_INT > 23) releasePlayer()
     }
 
     override fun onDestroy() {
@@ -336,9 +292,13 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         DownloadingFragment.playerDownloadingCancelled.onNext(true)
     }
 
-    override fun onSaveInstanceState(bundle: Bundle) {
-        super.onSaveInstanceState(bundle)
-        bundle.putInt(currentPageKey, quranViewpager.currentItem + 1)
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (exoPlayer != null) {
+            releasePlayer()
+            initializePlayer()
+        }
     }
 
     fun updatePagerPadding(pad: Int) {
@@ -346,9 +306,22 @@ class ReadQuranActivity : BaseActivity(true), View.OnClickListener {
         scrollView?.updatePadding(bottom = pad)
     }
 
+    override fun onSaveInstanceState(bundle: Bundle) {
+        super.onSaveInstanceState(bundle)
+        bundle.putInt(currentPageKey, quranViewpager.currentItem + 1)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                onPermissionGiven?.invoke()
+             else CustomToast.makeShort(this, "Cannot save audio files without the requested permission")
+        }
+    }
+
     companion object {
         private var exoMediaSource: MediaSource? = null
-        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101
+        const val REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 101
         private val BANDWIDTH_METER = DefaultBandwidthMeter()
         const val START_AT_PAGE_KEY = "start-at-page"
         private var currentPlayedAyat: List<Aya>? = null

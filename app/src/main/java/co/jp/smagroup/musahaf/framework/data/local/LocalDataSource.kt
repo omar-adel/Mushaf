@@ -88,10 +88,11 @@ class LocalDataSource : LocalDataSourceProviders {
     override suspend fun getAllEditions(): List<Edition> =
         SQLite.select().from(Edition::class.java).queryList()
 
-    override fun getEditionsByType(type: String): List<Edition> {
-        return SQLite.select().from(Edition::class.java).where(Edition_Table.format eq type).queryList()
-    }
+    override fun getEditionsByType(type: String): List<Edition> =
+        SQLite.select().from(Edition::class.java).where(Edition_Table.format eq type).queryList()
 
+    override suspend fun getAvailableReciters(): List<Edition> =
+        SQLite.select().from(Edition::class.java).where(Edition_Table.format eq MusahafConstants.Audio).queryList()
     override suspend fun getDownloadingState(identifier: String): DownloadingState =
         SQLite.select().from(DownloadingState::class.java).where(DownloadingState_Table.identifier eq identifier).querySingle()
             ?: DownloadingState(identifier = identifier)

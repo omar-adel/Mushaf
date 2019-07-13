@@ -1,7 +1,9 @@
 package co.jp.smagroup.musahaf.ui.commen
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -11,14 +13,21 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import co.jp.smagroup.musahaf.ui.quran.read.ReadQuranActivity
 import co.jp.smagroup.musahaf.utils.LocaleHelper
 import com.codebox.lib.android.utils.AppPreferences
+import com.codebox.lib.standard.lambda.unitFun
 
 /**
  * Created by ${User} on ${Date}
  */
 abstract class BaseActivity(private val isRequiringFullScreen: Boolean = false) : AppCompatActivity() {
-    val preferences =AppPreferences()
+    val preferences = AppPreferences()
+    protected var onPermissionGiven: unitFun? = null
+    private set
+
     var currentSystemVisibility: Boolean = false
         protected set
     private var initialLocale: String? = null
@@ -101,7 +110,28 @@ abstract class BaseActivity(private val isRequiringFullScreen: Boolean = false) 
     fun unlockScreenOrientation() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
+
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(base))
     }
+
+    private fun requestForSpecificPermission(requestCode: Int, vararg permissions: String) {
+        ActivityCompat.requestPermissions(this, permissions, requestCode)
+    }
+
+    //TODO replace  Manifest.permission.WRITE_EXTERNAL_STORAGE with param
+    fun executeWithPendingPermission(requestCode: Int,block: unitFun) {
+        onPermissionGiven = block
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            val result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (result == PackageManager.PERMISSION_GRANTED)
+                block.invoke()
+            else
+                requestForSpecificPermission(requestCode
+                    , Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        } else {
+            block.invoke()
+        }
+    }
+
 }

@@ -70,7 +70,6 @@
 
             <include layout="@layout/layout_surah_header"/>
 
-
             <co.jp.smagroup.musahaf.ui.quran.read.helpers.QuranTextView
                     android:layout_weight="1"
                     tools:text="@string/surah_tools"
@@ -89,9 +88,7 @@
                     android:lineSpacingMultiplier="1.0"
                     android:paddingLeft="4dp"/>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView
->
-
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
 
 

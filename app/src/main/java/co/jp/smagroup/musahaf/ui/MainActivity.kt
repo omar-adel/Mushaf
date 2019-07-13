@@ -7,29 +7,23 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import co.jp.smagroup.musahaf.R
-import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.data.repo.Repository
 import co.jp.smagroup.musahaf.ui.bookmarks.BookmarksFragment
 import co.jp.smagroup.musahaf.ui.commen.BaseActivity
 import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
-import co.jp.smagroup.musahaf.ui.commen.PreferencesConstants
 import co.jp.smagroup.musahaf.ui.library.LibraryFragment
 import co.jp.smagroup.musahaf.ui.more.SettingsFragment
-import co.jp.smagroup.musahaf.ui.quran.QuranListFragment
+import co.jp.smagroup.musahaf.ui.quran.QuranIndexFragment
 import co.jp.smagroup.musahaf.ui.quran.QuranViewModel
-import co.jp.smagroup.musahaf.ui.quran.read.ReadQuranActivity
-import co.jp.smagroup.musahaf.utils.extensions.observeOnMainThread
 import co.jp.smagroup.musahaf.utils.extensions.viewModelOf
 import co.jp.smagroup.musahaf.utils.notNull
-import com.codebox.lib.android.actvity.newIntent
 import com.codebox.lib.android.fragments.replaceFragment
-import com.codebox.lib.android.utils.AppPreferences
 import com.codebox.lib.android.views.utils.invisible
-import com.codebox.lib.android.widgets.shortToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,7 +46,7 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigationViewModel = viewModelOf(NavigationViewModel::class.java)
-        //updateReciters()
+        GlobalScope.launch(Dispatchers.IO) { repository.getAvailableReciters(true) }
 
         if (savedInstanceState != null) {
             val (navigationId, currentFragment) = navigationViewModel.getCurrentNavigation()
@@ -81,7 +75,7 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
             when (item.itemId) {
                 R.id.nav_home -> {
                     if (!QuranViewModel.isQuranDataLoaded()) bottom_app_nav.invisible()
-                    fragment = QuranListFragment()
+                    fragment = QuranIndexFragment()
                 }
                 R.id.nav_library -> fragment = LibraryFragment()
                 R.id.nav_bookmarks -> fragment = BookmarksFragment()
@@ -121,14 +115,5 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
                 endToolbar_icon.setImageResource(endIcon)
         }
     }
-
-    private fun updateReciters() {
-        disposable = repository.errorStream.filter { it != "" }.observeOnMainThread { shortToast(it) }
-
-        GlobalScope.launch {
-            repository.getEditionsByType(MusahafConstants.Audio, true)
-        }
-    }
-
 }
 

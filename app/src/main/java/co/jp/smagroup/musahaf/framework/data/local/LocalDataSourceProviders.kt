@@ -25,6 +25,7 @@ interface LocalDataSourceProviders {
     suspend fun getAvailableEditions(format: String, language: String): List<Edition>
     suspend fun getAllEditions(): List<Edition>
     fun getEditionsByType(@EditionTypeOpt type: String): List<Edition>
+    suspend fun getAvailableReciters(): List<Edition>
     suspend fun getDownloadingState(identifier: String): DownloadingState?
     suspend fun getDownloadedDataReciter(reciterName: String): List<Reciter>
 

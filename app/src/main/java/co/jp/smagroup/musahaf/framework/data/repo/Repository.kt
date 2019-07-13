@@ -6,7 +6,6 @@ import co.jp.smagroup.musahaf.framework.commen.MusahafConstants
 import co.jp.smagroup.musahaf.framework.data.local.LocalDataSource
 import co.jp.smagroup.musahaf.framework.utils.NewAPI
 import co.jp.smagroup.musahaf.framework.utils.ReciterRequestGenerator
-import co.jp.smagroup.musahaf.framework.utils.TextTypeOpt
 import co.jp.smagroup.musahaf.model.*
 import co.jp.smagroup.musahaf.ui.commen.MusahafApplication
 import co.jp.smagroup.musahaf.ui.quran.QuranViewModel
@@ -198,6 +197,17 @@ class Repository : RepositoryProviders {
             }
         return data
     }
+   override suspend fun getAvailableReciters(fromInternet: Boolean ): List<Edition> {
+       var data = listOf<Edition>()
+       if (!fromInternet)
+           data = localDataSource.getAvailableReciters()
+       if (fromInternet || data.isEmpty())
+           quranCloudAPI.getEditionsByType(MusahafConstants.Audio).awaitRequest {
+               data = it.editions.removeInGrantedReciters()
+               localDataSource.addEditions(data)
+           }
+      return data
+   }
 
     override suspend fun getDownloadedEditions(): List<Edition> =
         localDataSource.getAllEditions().distinctBy { it.identifier }.filter { isDownloaded(it.identifier) }
@@ -258,4 +268,9 @@ class Repository : RepositoryProviders {
         loadingStream.onNext(0)
     }
 
+    //Removing some reciters due to incorrectness in reciting.
+    private fun List<Edition>.removeInGrantedReciters(): List<Edition> {
+        val data = this.toMutableList()
+        return data.filter { it.identifier != "ar.ahmedajamy" || it.identifier != "ar.mahermuaiqly" }
+    }
 }

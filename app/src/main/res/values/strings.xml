@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Musahaf</string>
+    <string name="app_name">Mushaf</string>
     <string name="app_version" translatable="false">V1.0</string>
     <string name="playback_channel_name" translatable="false">Playback</string>
 
@@ -13,7 +13,7 @@
     <string name="library">Library</string>
     <string name="reciters">Reciters</string>
     <string name="more">More</string>
-    <string name="last_page">last page</string>
+    <string name="last_page">Last page</string>
     <string name="retry">Retry</string>
     <string name="connection_error">Connection Error</string>
     <string name="juz">Juz\'</string>
@@ -113,7 +113,9 @@
     <string name="playing_error">Playing Error</string>
     <string name="audio_quality_options" translatable="false">audio_quality_options</string>
     <string name="audio_quality_title">Reciter audio quality</string>
-    <string name="audio_quality_summary">Changing this setting will only affect audio online streaming. Increasing audio quality will increase data usage</string>
+    <string name="audio_quality_summary">Changing this setting will only affect audio online streaming. Increasing audio
+        quality will increase data usage
+    </string>
 
     <string name="low">Low</string>
     <string name="medium">Medium</string>
@@ -123,6 +125,7 @@
     <string name="bookmard_saved">Bookmark saved</string>
     <string name="shortcut_created">Shortcut Created</string>
     <string name="unable_to_add_shortcut">Unable to add a shortcut</string>
+    <string name="add_shortcut">Add shortcut to home screen</string>
 
 
 </resources>

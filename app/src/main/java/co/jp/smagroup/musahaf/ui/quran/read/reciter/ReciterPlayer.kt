@@ -35,7 +35,7 @@ class ReciterPlayer(
         if (isStreamingOnline)
             playOnline(playRange, selectedReciterId, eachVerse, wholeSet)
         else {
-            readQuranActivity.executeWithPermission {
+            readQuranActivity.executeWithPendingPermission(ReadQuranActivity.REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
                 coroutineScope.launch {
                     val downloadedReciter = getDownloadedReciters(playRange, selectedReciterId)
                     var notDownloadedAyaRequest = mutableListOf<Request>()

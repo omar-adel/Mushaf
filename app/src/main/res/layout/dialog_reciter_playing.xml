@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools" app:behavior_hideable="true"
         app:layout_behavior="@string/bottom_sheet_behavior"
-        android:minHeight="150dp"
+        android:minHeight="300dp"
         android:background="?toolbarColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

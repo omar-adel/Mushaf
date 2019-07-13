@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import co.jp.smagroup.musahaf.R
-import co.jp.smagroup.musahaf.ui.quran.QuranListFragment
+import co.jp.smagroup.musahaf.ui.quran.QuranIndexFragment
 
 /**
  * Created by ${User} on ${Date}
@@ -22,7 +22,7 @@ class NavigationViewModel : ViewModel() {
     fun getCurrentNavigation(): Pair<Int, Fragment> {
         if (!::currentNavigation.isInitialized)
             currentNavigation = MutableLiveData()
-        return currentNavigation.value ?: R.id.nav_home to QuranListFragment()
+        return currentNavigation.value ?: R.id.nav_home to QuranIndexFragment()
     }
 
 }

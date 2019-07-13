@@ -10,7 +10,7 @@ import co.jp.smagroup.musahaf.ui.library.manage.ManageLibraryActivity
 import co.jp.smagroup.musahaf.ui.library.manage.TabFragment
 import co.jp.smagroup.musahaf.ui.library.read.ReadLibraryActivity
 import co.jp.smagroup.musahaf.ui.quran.read.ReadQuranActivity
-import co.jp.smagroup.musahaf.ui.quran.QuranListFragment
+import co.jp.smagroup.musahaf.ui.quran.QuranIndexFragment
 import co.jp.smagroup.musahaf.ui.quran.read.reciter.ReciterBottomSheet
 import co.jp.smagroup.musahaf.ui.quran.read.translation.TranslationBottomSheet
 import co.jp.smagroup.musahaf.ui.search.SearchActivity
@@ -40,7 +40,7 @@ interface AppComponent {
     fun inject(progressDialog: ProgressDialog)
 
     fun inject(libraryFragment: LibraryFragment)
-    fun inject(quranListFragment: QuranListFragment)
+    fun inject(quranListFragment: QuranIndexFragment)
     fun inject(tabFragment: TabFragment)
     fun inject(translationBottomSheet: TranslationBottomSheet)
     fun inject(reciterBottomSheet: ReciterBottomSheet)

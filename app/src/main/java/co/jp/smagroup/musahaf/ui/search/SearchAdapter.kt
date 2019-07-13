@@ -13,6 +13,7 @@ import co.jp.smagroup.musahaf.model.Aya
 import co.jp.smagroup.musahaf.model.Edition
 import co.jp.smagroup.musahaf.ui.library.read.ReadLibraryActivity
 import co.jp.smagroup.musahaf.ui.quran.read.ReadQuranActivity
+import co.jp.smagroup.musahaf.utils.whiteSpaceMagnifier
 import com.codebox.lib.android.actvity.newIntent
 import com.codebox.lib.android.utils.AppPreferences
 import com.codebox.lib.android.utils.isRightToLeft
@@ -56,9 +57,11 @@ class SearchAdapter(
                 if (searchType == Edition.Quran) {
                     val typeface = ResourcesCompat.getFont(context, R.font.quran_me)
                     aya_text_search.typeface = typeface
+                    aya_text_search.text = whiteSpaceMagnifier(aya.text)
                 }
+                else
+                    aya_text_search.text = aya.text
 
-                aya_text_search.text = aya.text
                 var searchInfo = if (isRightToLeft == 1) aya.surah!!.englishName else aya.surah!!.name
                 searchInfo += if (searchType != Edition.Quran) " ${context.getString(R.string.In)} ${aya.edition!!.name} " else ""
 

@@ -103,5 +103,6 @@
     <string name="bookmard_saved">تم حفظ الإشارة</string>
     <string name="shortcut_created">تم إنشاء الإختصار</string>
     <string name="unable_to_add_shortcut">Unable to add a shortcut</string>
+    <string name="add_shortcut">إضافة إختصار إلى الشاشة الرئيسية</string>
 
 </resources>
